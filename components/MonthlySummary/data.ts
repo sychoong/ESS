@@ -1,5 +1,5 @@
-import { DAY_9_30_HOURS } from "@/app/util/constants";
-import { parseDate } from "@/app/util/helper";
+import { DAY_9_30_HOURS } from "@/util/constants";
+import { parseDate } from "@/util/helper";
 
 const getData = (timeSheets: AttendanceDay[], selectedMonth: number) => {
   const year = new Date().getFullYear();

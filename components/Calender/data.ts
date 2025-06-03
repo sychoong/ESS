@@ -7,7 +7,7 @@ import {
   formatDate,
   parseDate,
   eachDay,
-} from "@/app/util/helper";
+} from "@/util/helper";
 
 const getData = (
   timeSheets: AttendanceDay[],

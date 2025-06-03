@@ -20,10 +20,9 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
-  report,
-  auth,
+  children,
 }: Readonly<{
-  report: React.ReactNode;
+  children: React.ReactNode;
   auth: React.ReactNode;
 }>) {
   const cookiesStore = await cookies();
@@ -34,11 +33,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
-        {token ? (
-          <Suspense fallback={<div>Loading...</div>}>{report}</Suspense>
-        ) : (
-          auth
-        )}
+        {children}
       </body>
     </html>
   );
