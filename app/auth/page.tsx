@@ -6,7 +6,7 @@ export default function Auth() {
   const router = useRouter();
   return (
     <div className="max-w-md mx-auto mt-16 p-6 border rounded shadow-md">
-      <h1 className="text-xl font-bold mb-4">Set Cookie Demo (SSR)</h1>
+      <h1 className="text-xl font-bold mb-4">Set ESS cookies</h1>
 
       <form className="flex flex-col space-y-4">
         <label htmlFor="inputValue" className="font-semibold">

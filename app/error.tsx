@@ -5,7 +5,6 @@ import { useEffect } from "react";
 
 export default function Error({
   error,
-  reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
@@ -26,7 +25,6 @@ export default function Error({
           () => {
             document.cookie =
               "ess_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-            // reset();
             router.push("/auth"); // Redirect to home page after resetting
           }
         }
