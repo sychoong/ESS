@@ -20,7 +20,6 @@ const getData = (
   const startDate = new Date(year, selectedMonth - 1, 1);
   const startMonth = startOfMonth(startDate);
   const endMonth = endOfMonth(startDate);
-  const today = new Date();
   // Calendar grid start & end dates (Sunday - Saturday)
   const calendarStart = startOfWeek(startMonth);
   const calendarEnd = endOfWeek(endMonth);
