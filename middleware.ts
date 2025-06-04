@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(request: NextRequest) {
   // Check if the request has a cookie
   const cookie = request.cookies.get("ess_token");
-  console.log("🚀 ~ middleware ~ cookie:", cookie)
   if (!cookie && !request.nextUrl.pathname.startsWith("/auth")) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }

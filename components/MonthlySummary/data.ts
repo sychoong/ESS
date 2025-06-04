@@ -36,22 +36,26 @@ const getData = (
   const avgMinutesPerDay =
     workDaysInPeriod > 0 ? totalMinutesInPeriod / workDaysInPeriod : 0;
   const meetsThreshold = avgMinutesPerDay >= MINUTES_8_HOURS; // 8 hours in minutes
-  const minThreshold = MINUTES_8_HOURS - avgMinutesPerDay; // 6.5 hours after lunch break
-  const lastAttendanceClockIn = timeSheets.length
-    ? new Date(
-        timeSheets[timeSheets.length - 1].employee_attendances[0].clock_in
-      )
+
+  const shouldWorkHours = workDaysInPeriod * MINUTES_8_HOURS; // Total expected work hours in minutes
+  const workHoursLeft = shouldWorkHours - totalMinutesInPeriod; // Remaining work hours in minutes
+  const minThreshold = MINUTES_8_HOURS - workHoursLeft; 
+  const lastAttendance = timeSheets.length?
+        timeSheets[timeSheets.length - 1].employee_attendances[0]
     : null;
 
-  let expectedClockOut = lastAttendanceClockIn
-    ? new Date(
-        lastAttendanceClockIn.getTime() +
+  let expectedClockOut =
+    lastAttendance?.clock_in
+      ? new Date(
+          new Date(lastAttendance.clock_in).getTime() +
           MINUTES_8_HOURS * 60 * 1000 + // 8 hours in milliseconds
           LUNCH_BREAK_MINUTES * 60 * 1000 + // Lunch break in milliseconds
           minThreshold * 60 * 1000
       )
     : null;
   if (currentMonth !== selectedMonth) expectedClockOut = null;
+  if (lastAttendance?.clock_in && lastAttendance?.clock_out) expectedClockOut = null;
+  
   return {
     totalMinutesInPeriod,
     workDaysInPeriod,
@@ -60,6 +64,7 @@ const getData = (
     periodStart,
     periodEnd,
     expectedClockOut,
+    workHoursLeft
   };
 };
 
