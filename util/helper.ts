@@ -1,3 +1,5 @@
+import { format } from "path";
+
 // Helper: parse YYYY-MM-DD string to Date (midnight)
 function parseDate(dateStr: string): Date {
   const [year, month, day] = dateStr.split("-").map(Number);
@@ -10,6 +12,31 @@ function formatDate(date: Date): string {
   const m = (date.getMonth() + 1).toString().padStart(2, "0");
   const d = date.getDate().toString().padStart(2, "0");
   return `${y}-${m}-${d}`;
+}
+
+function formatDateTime(date: Date): string {
+  const y = date.getFullYear();
+  const m = (date.getMonth() + 1).toString().padStart(2, "0");
+  const d = date.getDate().toString().padStart(2, "0");
+  const hh = date.getHours().toString().padStart(2, "0");
+  const mm = date.getMinutes().toString().padStart(2, "0");
+  const ss = date.getSeconds().toString().padStart(2, "0");
+  return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+}
+
+function formatTime(date: Date): string {
+  const hh = date.getHours().toString().padStart(2, "0");
+  const mm = date.getMinutes().toString().padStart(2, "0");
+  const ss = date.getSeconds().toString().padStart(2, "0");
+  return `${hh}:${mm}:${ss}`;
+}
+
+function formatTimeIn12Hour(date: Date): string {
+  const hh = date.getHours() % 12 || 12; // Convert to 12-hour format
+  const mm = date.getMinutes().toString().padStart(2, "0");
+  const ss = date.getSeconds().toString().padStart(2, "0");
+  const ampm = date.getHours() < 12 ? "AM" : "PM";
+  return `${hh}:${mm}:${ss} ${ampm}`;
 }
 
 // Helper: get Sunday 0-based week start for a date
@@ -118,4 +145,7 @@ export {
   getISOWeekStart,
   formatWeekRange,
   eachDay,
+  formatDateTime,
+  formatTime,
+  formatTimeIn12Hour
 };

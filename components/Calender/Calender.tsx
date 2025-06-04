@@ -2,7 +2,11 @@ type CalendarProps = {
   month: number;
   calendarDates: string[];
   attendanceByDate: {
-    [date: string]: { clockIn: string; clockOut: string; total: number };
+    [date: string]: {
+      clockIn: string;
+      clockOut: string;
+      total: number;
+    };
   };
   holidays: { [date: string]: string };
   leave: { [date: string]: { leaveTypeName: string } };
@@ -104,7 +108,7 @@ export default function Calendar({
                 <div className="text-xs text-green-800 flex flex-col ">
                   <span>In: {clockIn}</span>
                   <span>Out: {clockOut}</span>
-                  <span>Total{formatDuration(workedMinutes)}</span>
+                  <span>Total: {formatDuration(workedMinutes)}</span>
                 </div>
               )}
               {isHoliday && (

@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { ESS_API_URL } from "../util/constants";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const getAttendance = async (
+const getLeave = async (
   startDate: string,
   endDate: string
 ): Promise<Leave[]> => {
@@ -32,11 +32,14 @@ const getAttendance = async (
   }
 
   const { data } = await response.json();
-  return data.data.map((item: any) => ({
-    startDate: item.start_date,
-    endDate: item.end_date,
-    leaveType: item.leave_type.name,
-  }));
+  return data.data
+    .filter((item: any) => item.status === 1)
+    .map((item: any) => ({
+      startDate: item.start_date,
+      endDate: item.end_date,
+      leaveType: item.leave_type.name,
+      hourApplied: item.days_applied,
+    }));
 };
 
-export default getAttendance;
+export default getLeave;

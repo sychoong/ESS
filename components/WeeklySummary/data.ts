@@ -1,3 +1,4 @@
+import { LUNCH_BREAK_MINUTES } from "@/util/constants";
 import { parseDate, getISOWeek } from "@/util/helper";
 
 const getData = (timeSheets: AttendanceDay[]) => {
@@ -12,7 +13,7 @@ const getData = (timeSheets: AttendanceDay[]) => {
     const { year, week } = getISOWeek(d);
     const weekKey = `${year}-W${week}`;
     if (!weeklySummaries[weekKey]) weeklySummaries[weekKey] = 0;
-    weeklySummaries[weekKey] += total;
+    weeklySummaries[weekKey] += total - LUNCH_BREAK_MINUTES; // Subtract 1.5 hours for lunch break
   });
 
   return {

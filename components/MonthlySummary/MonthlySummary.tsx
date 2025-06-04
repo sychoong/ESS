@@ -1,4 +1,5 @@
-import { formatDate, formatDuration } from "../../util/helper";
+import { formatDate, formatDuration, formatTimeIn12Hour } from "../../util/helper";
+import CountdownTimer from "../CountdownTimer";
 
 type MonthlySummaryProps = {
   totalMinutesInPeriod: number;
@@ -7,6 +8,7 @@ type MonthlySummaryProps = {
   meetsThreshold: boolean;
   periodStart: Date;
   periodEnd: Date;
+  expectedClockOut?: Date; // Optional prop for expected clock out time
 };
 
 export default function MonthlySummary({
@@ -16,10 +18,14 @@ export default function MonthlySummary({
   meetsThreshold,
   periodStart,
   periodEnd,
+  expectedClockOut, // Optional prop for expected clock out time
 }: MonthlySummaryProps) {
   return (
     <div className="max-w-4xl mx-auto p-6 text-black">
       {/* existing calendar and weekly summaries */}
+      {expectedClockOut && (
+        <CountdownTimer targetDate={expectedClockOut} />
+      )}
 
       {/* Monthly summary: 20th previous month - 20th current month */}
       <div className="mt-8 p-4 border rounded bg-blue-50 border-blue-300">
@@ -37,6 +43,12 @@ export default function MonthlySummary({
         <p>
           Work Days: <strong>{workDaysInPeriod}</strong>
         </p>
+        {expectedClockOut && (
+          <p>
+            Expected Clock Out:{" "}
+            <strong className="text-blue-700">{formatTimeIn12Hour(expectedClockOut)}</strong>
+          </p>
+        )}
         <p>
           Average Hours per Workday:{" "}
           <strong>{formatDuration(Math.round(avgMinutesPerDay))}</strong>
@@ -49,8 +61,8 @@ export default function MonthlySummary({
           }
         >
           {meetsThreshold
-            ? "✓ Meets 9.5 hours/day target"
-            : "✗ Below 9.5 hours/day"}
+            ? "✓ Meets 8 hours/day target"
+            : "✗ Below 8 hours/day"}
         </p>
       </div>
     </div>

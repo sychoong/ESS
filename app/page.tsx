@@ -7,9 +7,11 @@ import CalendarWrapper from "@/components/Calender";
 import {
   endOfMonth,
   endOfWeek,
+  parseDate,
   startOfMonth,
   startOfWeek,
 } from "@/util/helper";
+import { REPLACEMENT_HOURS } from "@/util/constants";
 
 export default async function Report({
   searchParams,
@@ -27,19 +29,31 @@ export default async function Report({
   const year = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
   const startDate = new Date(year, month - 1, 1);
-  const startMonth = startOfMonth(startDate);
-  const calendarStart = startOfWeek(startMonth);
-  const endMonth = endOfMonth(startDate);
-  const calendarEnd = endOfWeek(endMonth);
+
+  const calendarStart = new Date(year, month - 2, 20); // Previous month 20th
+  const calendarEnd = endOfWeek(endOfMonth(startDate));
   const { timeSheets, holidays: holidaysData } = await getAttendance(
     calendarStart.toISOString().split("T")[0],
     calendarEnd.toISOString().split("T")[0]
   );
 
+  const periodStart = new Date(year, month - 2, 21); // previous month 21st
+  const periodEnd = new Date(year, month - 1, 20);
+
   const leave = await getLeave(
     calendarStart.toISOString().split("T")[0],
     calendarEnd.toISOString().split("T")[0]
   );
+
+  const replacementLeaveHours = leave
+    .filter(
+      (l) =>
+        l.leaveType === REPLACEMENT_HOURS &&
+        parseDate(l.startDate) >= periodStart &&
+        parseDate(l.endDate) <= periodEnd
+    )
+    .reduce((total, l) => total + l.hourApplied, 0);
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4 text-center">
@@ -51,6 +65,13 @@ export default async function Report({
         startDate={startDate}
       />
 
+      <MonthlySummaryWrapper
+        selectedMonth={month}
+        timeSheets={timeSheets}
+        replacementLeaveHours={replacementLeaveHours}
+        currentMonth={currentMonth}
+      />
+
       <CalendarWrapper
         timeSheets={timeSheets}
         selectedMonth={month}
@@ -58,9 +79,7 @@ export default async function Report({
         leave={leave}
       />
 
-      <WeeklySummaryWrapper timeSheets={timeSheets} />
-
-      <MonthlySummaryWrapper selectedMonth={month} timeSheets={timeSheets} />
+      {/* <WeeklySummaryWrapper timeSheets={timeSheets} /> */}
     </div>
   );
 }

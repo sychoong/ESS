@@ -24,3 +24,37 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.perspective {
+  perspective: 600px;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+.will-change-transform {
+  will-change: transform;
+}
+@keyframes flipDown {
+  0% {
+    transform: rotateX(0deg);
+  }
+  100% {
+    transform: rotateX(-90deg);
+  }
+}
+@keyframes flipUp {
+  0% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+.animate-flipDown {
+  animation: flipDown 0.6s forwards;
+  transform-origin: bottom center;
+}
+.animate-flipUp {
+  animation: flipUp 0.6s forwards;
+  transform-origin: top center;
+}

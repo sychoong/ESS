@@ -19,6 +19,7 @@ declare global {
     startDate: string;
     endDate: string;
     leaveType: string;
+    hourApplied: number;
   }
 }
 export {};
