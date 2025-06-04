@@ -1,13 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import TokenFetcher from "./TokenFetcher";
 
 export default function Auth() {
   const router = useRouter();
+
   return (
     <div className="max-w-md mx-auto mt-16 p-6 border rounded shadow-md">
       <h1 className="text-xl font-bold mb-4">Set ESS cookies</h1>
-
+      <TokenFetcher></TokenFetcher>
       <form className="flex flex-col space-y-4">
         <label htmlFor="inputValue" className="font-semibold">
           Enter value to store in cookie:
