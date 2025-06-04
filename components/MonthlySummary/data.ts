@@ -1,5 +1,5 @@
 import { MINUTES_8_HOURS, LUNCH_BREAK_MINUTES } from "@/util/constants";
-import { formatTimeIn12Hour, parseDate } from "@/util/helper";
+import { parseDate } from "@/util/helper";
 
 const getData = (
   timeSheets: AttendanceDay[],

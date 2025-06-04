@@ -1,15 +1,12 @@
 import getAttendance from "@/action/getAttendance";
 import getLeave from "@/action/getLeave";
 import MonthSelector from "@/components/MonthSelector";
-import WeeklySummaryWrapper from "@/components/WeeklySummary";
 import MonthlySummaryWrapper from "@/components/MonthlySummary";
 import CalendarWrapper from "@/components/Calender";
 import {
   endOfMonth,
   endOfWeek,
   parseDate,
-  startOfMonth,
-  startOfWeek,
 } from "@/util/helper";
 import { REPLACEMENT_HOURS } from "@/util/constants";
 

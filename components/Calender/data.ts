@@ -1,4 +1,4 @@
-import { MINUTES_8_HOURS, LUNCH_BREAK_MINUTES, REPLACEMENT_HOURS } from "@/util/constants";
+import { LUNCH_BREAK_MINUTES, REPLACEMENT_HOURS } from "@/util/constants";
 import {
   startOfMonth,
   endOfMonth,
@@ -8,8 +8,6 @@ import {
   formatDate,
   parseDate,
   eachDay,
-  formatTime,
-  formatTimeIn12Hour,
 } from "@/util/helper";
 
 const getData = (
@@ -57,7 +55,6 @@ const getData = (
       attendanceByDate[date].total -= LUNCH_BREAK_MINUTES; // Subtract 1.5 hours for lunch break
     }
   });
-
 
   // Create holiday map from holidaysData with date -> holiday_name
   const holidays: Record<string, string> = {};
