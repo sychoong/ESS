@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { AUTH_COOKIE_NAME } from "@/util/constants";
 
 export function middleware(request: NextRequest) {
   // Check if the request has a cookie
-  const cookie = request.cookies.get("ess_token");
+  const cookie = request.cookies.get(AUTH_COOKIE_NAME);
   if (!cookie && !request.nextUrl.pathname.startsWith("/auth")) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }

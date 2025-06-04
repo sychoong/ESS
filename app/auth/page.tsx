@@ -1,5 +1,6 @@
 "use client";
 
+import { AUTH_COOKIE_NAME } from "@/util/constants";
 import { useRouter } from "next/navigation";
 
 export default function Auth() {
@@ -36,7 +37,7 @@ export default function Auth() {
               alert("Please enter a value to save in the cookie.");
               return;
             }
-            document.cookie = `ess_token=${encodeURIComponent(
+            document.cookie = `${AUTH_COOKIE_NAME}=${encodeURIComponent(
               value
             )}; path=/; max-age=${60 * 60 * 24 * 7}`;
             alert("Cookie saved!");

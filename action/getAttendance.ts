@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { ESS_API_URL } from "../util/constants";
+import { AUTH_COOKIE_NAME, ESS_API_URL } from "@/util/constants";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const getAttendance = async (
@@ -12,7 +12,7 @@ const getAttendance = async (
   const cookiesStore = await cookies();
 
   const url = "/v1/ess/attendance/employee/timesheets_v2";
-  const token = cookiesStore.get("ess_token")?.value;
+  const token = cookiesStore.get(AUTH_COOKIE_NAME)?.value;
   if (!token) {
     throw new Error("Authentication token is missing");
   }
