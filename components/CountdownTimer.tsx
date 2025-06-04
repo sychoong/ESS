@@ -2,10 +2,20 @@
 import { useEffect, useState } from "react";
 
 export default function Countdown({ targetDate }: { targetDate: Date }) {
+  // Convert UTC targetDate to local time
+  const localTargetDate = new Date(
+    targetDate.getUTCFullYear(),
+    targetDate.getUTCMonth(),
+    targetDate.getUTCDate(),
+    targetDate.getUTCHours(),
+    targetDate.getUTCMinutes(),
+    targetDate.getUTCSeconds()
+  );
+
   // State for time left in seconds
   const [timeLeft, setTimeLeft] = useState(() => {
     const diff = Math.floor(
-      (targetDate.getTime() - new Date().getTime()) / 1000
+      (localTargetDate.getTime() - new Date().getTime()) / 1000
     );
     return diff > 0 ? diff : 0;
   });
