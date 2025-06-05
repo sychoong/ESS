@@ -21,6 +21,7 @@ export default function MonthlySummaryWrapper({
     periodEnd,
     expectedClockOut,
     workHoursLeft,
+    normalClockOut
   } = getData(timeSheets, selectedMonth, replacementLeaveHours, currentMonth);
   return (
     <MonthlySummary
@@ -32,6 +33,7 @@ export default function MonthlySummaryWrapper({
       periodEnd={periodEnd}
       expectedClockOut={expectedClockOut ?? undefined}
       workHoursLeft={workHoursLeft}
+      normalClockOut={normalClockOut ?? undefined}
     />
   );
 }

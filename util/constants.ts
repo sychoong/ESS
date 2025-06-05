@@ -7,11 +7,15 @@ const ESS_API_URL =
 
 const REPLACEMENT_HOURS = "Replacement Hours";
 const AUTH_COOKIE_NAME = "auth_token"; // Cookie name for authentication token
+
+const BASE_LOCATION = [3.1115281, 101.668227];
+
 export {
   MINUTES_40_HOURS,
   MINUTES_8_HOURS,
   ESS_API_URL,
   LUNCH_BREAK_MINUTES,
   REPLACEMENT_HOURS,
-  AUTH_COOKIE_NAME
+  AUTH_COOKIE_NAME,
+  BASE_LOCATION,
 };

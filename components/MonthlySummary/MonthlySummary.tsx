@@ -15,6 +15,7 @@ type MonthlySummaryProps = {
   periodEnd: Date;
   expectedClockOut?: Date; // Optional prop for expected clock out time
   workHoursLeft: number; // Remaining work hours in minutes
+  normalClockOut?: Date; // Optional prop for normal clock out time
 };
 
 export default function MonthlySummary({
@@ -26,6 +27,7 @@ export default function MonthlySummary({
   periodEnd,
   expectedClockOut, // Optional prop for expected clock out time
   workHoursLeft,
+  normalClockOut, // Optional prop for normal clock out time
 }: MonthlySummaryProps) {
   return (
     <div className="max-w-4xl mx-auto p-6 text-black">
@@ -58,6 +60,14 @@ export default function MonthlySummary({
             Expected Clock Out:{" "}
             <strong className="text-blue-700">
               {formatTimeIn12Hour(expectedClockOut)}
+            </strong>
+          </p>
+        )}
+        {normalClockOut && (
+          <p>
+            Normal Clock Out:{" "}
+            <strong className="text-blue-700">
+              {formatTimeIn12Hour(normalClockOut)}
             </strong>
           </p>
         )}
