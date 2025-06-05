@@ -52,7 +52,7 @@ const getData = (
       )
     : null;
 
-  let normalClockOut = lastAttendance?.clock_in
+  const normalClockOut = lastAttendance?.clock_in
     ? new Date(
         new Date(lastAttendance.clock_in).getTime() +
           MINUTES_8_HOURS * 60 * 1000 + // 8 hours in milliseconds
@@ -72,7 +72,8 @@ const getData = (
     periodEnd,
     expectedClockOut,
     workHoursLeft,
-    normalClockOut
+    normalClockOut,
+    lastAttendance
   };
 };
 

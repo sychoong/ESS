@@ -1,4 +1,3 @@
-import { format } from "path";
 import { BASE_LOCATION } from "./constants";
 
 // Helper: parse YYYY-MM-DD string to Date (midnight)
@@ -32,12 +31,18 @@ function formatTime(date: Date): string {
   return `${hh}:${mm}:${ss}`;
 }
 
-function formatTimeIn12Hour(date: Date): string {
-  const hh = date.getHours() % 12 || 12; // Convert to 12-hour format
-  const mm = date.getMinutes().toString().padStart(2, "0");
-  const ss = date.getSeconds().toString().padStart(2, "0");
-  const ampm = date.getHours() < 12 ? "AM" : "PM";
-  return `${hh}:${mm}:${ss} ${ampm}`;
+function formatTimeIn12Hour(date: Date | null | undefined): string {
+  try {
+    if (!date) return "-";
+    const hh = date.getHours() % 12 || 12; // Convert to 12-hour format
+    const mm = date.getMinutes().toString().padStart(2, "0");
+    const ss = date.getSeconds().toString().padStart(2, "0");
+    const ampm = date.getHours() < 12 ? "AM" : "PM";
+    return `${hh}:${mm}:${ss} ${ampm}`;
+  } catch (error) {
+    console.error("Error formatting time in 12-hour format:", error);
+    return "-";
+  }
 }
 
 // Helper: get Sunday 0-based week start for a date
@@ -137,11 +142,8 @@ function* eachDay(start: Date, end: Date): Generator<Date> {
 function getLocation() {
   // Earth's radius in meters
   const earthRadius = 6371000;
-  const radiusInMeters = 100;
+  const radiusInMeters = 50;
   // Convert radius from meters to degrees (approximate)
-  const radiusInDegrees = (radiusInMeters / earthRadius) * (180 / Math.PI);
-
-  // Get base latitude and longitude
   const [baseLat, baseLng] = BASE_LOCATION;
 
   // Generate a random distance within the radius
@@ -178,9 +180,13 @@ function testDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
   const d = R * c; // in meters
-  return d;
+  return d.toFixed(2); // Return distance rounded to 2 decimal places
 }
 
+const getMagicLink = () => {
+  //TODO get a magic link pick a list of links randomly
+  return process.env.NEXT_PUBLIC_MAGIC_LINK_URL;
+};
 export {
   parseDate,
   formatDate,
@@ -199,4 +205,5 @@ export {
   formatTime,
   formatTimeIn12Hour,
   testDistance,
+  getMagicLink,
 };
