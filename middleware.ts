@@ -7,6 +7,16 @@ export function middleware(request: NextRequest) {
   if (!cookie && !request.nextUrl.pathname.startsWith("/auth")) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }
+   if (request.nextUrl.searchParams.get("token") ) {
+    const response = NextResponse.redirect(new URL("/", request.url));
+    response.cookies.set({
+      name: AUTH_COOKIE_NAME,
+      value: request.nextUrl.searchParams.get("token") || "",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    });
+    return response;
+  }
   return NextResponse.next();
 }
 
