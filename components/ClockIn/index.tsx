@@ -15,7 +15,6 @@ function ClockIn({
     (item) => item.date === formatDate(today)
   );
 
-  let newDay = false;
   let clockInOrOut = false;
   let show = true;
   if (
@@ -28,7 +27,6 @@ function ClockIn({
   else {
     //new day, time to work
     clockInOrOut = true;
-    newDay = true;
   }
 
   //hide clock in on sunday and sat
