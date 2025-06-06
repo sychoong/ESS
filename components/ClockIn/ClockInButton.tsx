@@ -1,7 +1,12 @@
 "use client";
 
-import { BASE_LOCATION, ESS_API_URL } from "@/util/constants";
-import { getLocation, testDistance } from "@/util/helper";
+import clockIn from "@/action/clockIn";
+import {  BASE_LOCATION } from "@/util/constants";
+import {
+  formatDateForClockIn,
+  getLocation,
+  testDistance,
+} from "@/util/helper";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -19,30 +24,26 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
   const [location, setLocation] = useState(getLocation());
   const [error, setError] = useState<boolean>(false);
   const router = useRouter();
+
   const handleClick = async () => {
+    // Example usage:
+    const now = new Date();
+    const formattedDateString = formatDateForClockIn(now);
     try {
       const clockData = {
         type: clockInOrOut ? "1" : "2", // 1 for clock in, 2 for clock out
         device_type: "web",
         ip_address: "null",
         accuracy: 20,
-        dateTime: new Date().toISOString().split(".")[0] + "+08:00",
+        datetime: formattedDateString,
         location: `${location.latitude}, ${location.longitude}`,
         external_id: id,
         remarks: "",
       };
-
-      const endPoint = "/v1/ess/attendance/attendance_log";
-      const formData = new FormData();
-      Object.entries(clockData).forEach(([key, value]) => {
-        formData.append(key, String(value));
-      });
-
-      const res = await fetch(ESS_API_URL + endPoint, {
-        method: "POST",
-        body: formData,
-      });
-      if (res.ok) {
+    
+      const res = await clockIn(clockData);
+      
+      if (res) {
         alert(`Clock ${clockInOrOut ? "in" : "out"} successful!`);
         router.refresh(); // Refresh the page to update attendance status
       }

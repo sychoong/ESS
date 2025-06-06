@@ -187,6 +187,37 @@ const getMagicLink = () => {
   //TODO get a magic link pick a list of links randomly
   return process.env.NEXT_PUBLIC_MAGIC_LINK_URL;
 };
+
+function getCookie(name: string): string | null {
+  const cookieString = document.cookie;
+  if (!cookieString) {
+    return null; // No cookies at all
+  }
+
+  const cookies = cookieString.split(";");
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim(); // Remove leading/trailing whitespace
+
+    // Check if the cookie starts with the name we want
+    if (cookie.startsWith(name + "=")) {
+      // Extract the cookie value
+      return cookie.substring(name.length + 1);
+    }
+  }
+
+  return null; // Cookie not found
+}
+function formatDateForClockIn(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+  const timezoneOffset = "+08:00"; // Fixed timezone for +08:00
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${timezoneOffset}`;
+}
 export {
   parseDate,
   formatDate,
@@ -206,4 +237,6 @@ export {
   formatTimeIn12Hour,
   testDistance,
   getMagicLink,
+  getCookie,
+  formatDateForClockIn,
 };
