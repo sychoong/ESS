@@ -2,11 +2,12 @@
 
 import { AUTH_COOKIE_NAME } from "@/util/constants";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 
 function Auth() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [cookiesValue, setCookiesValue] = useState(searchParams.get("auth") || "")
 
   return (
     <div className="max-w-md mx-auto mt-16 p-6 border rounded shadow-md">
@@ -20,7 +21,11 @@ function Auth() {
           id="inputValue"
           type="text"
           name="cookiesValue"
-          value={searchParams.get("token") || ""}
+          value={cookiesValue}
+          onChange={(e)=>{
+            e.preventDefault()
+            setCookiesValue(e.target.value)
+          }}
           className="border rounded px-3 py-2"
           placeholder="Type something..."
         />
