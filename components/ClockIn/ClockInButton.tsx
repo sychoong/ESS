@@ -1,12 +1,8 @@
 "use client";
 
 import clockIn from "@/action/clockIn";
-import {  BASE_LOCATION } from "@/util/constants";
-import {
-  formatDateForClockIn,
-  getLocation,
-  testDistance,
-} from "@/util/helper";
+import { BASE_LOCATION } from "@/util/constants";
+import { formatDateForClockIn, getLocation, testDistance } from "@/util/helper";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -22,11 +18,12 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
   id,
 }) => {
   const [location, setLocation] = useState(getLocation());
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const router = useRouter();
 
   const handleClick = async () => {
-    // Example usage:
+    setLoading(true);
     const now = new Date();
     const formattedDateString = formatDateForClockIn(now);
     try {
@@ -40,9 +37,8 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
         external_id: id,
         remarks: "",
       };
-    
       const res = await clockIn(clockData);
-      
+
       if (res) {
         alert(`Clock ${clockInOrOut ? "in" : "out"} successful!`);
         router.refresh(); // Refresh the page to update attendance status
@@ -56,6 +52,8 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
       );
       setError(true);
       return;
+    } finally {
+      setLoading(false);
     }
   };
   if (!show) return <></>;
@@ -91,7 +89,8 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
       {!error ? (
         <button
           onClick={handleClick}
-          className="px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
+          className="px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:bg-gray-500 disabled:cursor-wait"
+          disabled={loading}
         >
           {clockInOrOut ? "Clock In" : "Clock Out"}
         </button>
