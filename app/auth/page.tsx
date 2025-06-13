@@ -79,7 +79,7 @@ function Auth() {
             // );
             const url = new URL(decodeURI(await getLoginUrl()));
             const params = new URLSearchParams(url.search);
-            params.set("RelayState", `${process.env.NEXT_PUBLIC_BASE}/auth/`);
+            params.set("RelayState", `${window.location.origin}/auth/`);
             url.search = params.toString();
             router.push(url.toString()); // Redirect to home page after saving cookie
           }}
