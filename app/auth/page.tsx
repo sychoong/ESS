@@ -4,6 +4,8 @@ import { AUTH_COOKIE_NAME } from "@/util/constants";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
+export const dynamic = "force-dynamic";
+
 function Auth() {
   const router = useRouter();
   const searchParams = useSearchParams();

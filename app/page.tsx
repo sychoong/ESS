@@ -8,6 +8,7 @@ import { REPLACEMENT_HOURS } from "@/util/constants";
 import getUserInfo from "@/action/gerUserInfo";
 import ClockIn from "@/components/ClockIn";
 
+export const dynamic = "force-dynamic";
 
 export default async function Report({
   searchParams,
