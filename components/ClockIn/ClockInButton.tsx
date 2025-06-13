@@ -26,12 +26,14 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
     setLoading(true);
     const now = new Date();
     const formattedDateString = formatDateForClockIn(now);
+    const minAccuracy = 10; // 模拟用户 GPS 开着，通常 5～50 是最可信
+    const maxAccuracy = 100;
     try {
       const clockData = {
         type: clockInOrOut ? "1" : "2", // 1 for clock in, 2 for clock out
         device_type: "web",
         ip_address: "null",
-        accuracy: 20,
+        accuracy: Math.random() * (maxAccuracy - minAccuracy) + minAccuracy,
         datetime: formattedDateString,
         location: `${location.latitude}, ${location.longitude}`,
         external_id: id,
