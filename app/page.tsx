@@ -3,12 +3,11 @@ import getLeave from "@/action/getLeave";
 import MonthSelector from "@/components/MonthSelector";
 import MonthlySummaryWrapper from "@/components/MonthlySummary";
 import CalendarWrapper from "@/components/Calender";
-import {
-  endOfMonth,
-  endOfWeek,
-  parseDate,
-} from "@/util/helper";
+import { endOfMonth, endOfWeek, parseDate } from "@/util/helper";
 import { REPLACEMENT_HOURS } from "@/util/constants";
+import getUserInfo from "@/action/gerUserInfo";
+import ClockIn from "@/components/ClockIn";
+
 
 export default async function Report({
   searchParams,
@@ -51,16 +50,20 @@ export default async function Report({
     )
     .reduce((total, l) => total + l.hourApplied, 0);
 
+  const userInfo = await getUserInfo();
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4 text-center">
-        Employee Attendance Calendar
+        Hi, {userInfo.name} (id: {userInfo.id})
       </h1>
+
       <MonthSelector
         selectedMonth={month}
         currentMonth={currentMonth}
         startDate={startDate}
       />
+
+      <ClockIn id={userInfo.id} timeSheets={timeSheets}></ClockIn>
 
       <MonthlySummaryWrapper
         selectedMonth={month}
