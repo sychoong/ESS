@@ -1,5 +1,6 @@
 "use client";
 
+import { AUTH_COOKIE_NAME } from "@/util/constants";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -24,7 +25,7 @@ export default function Error({
           // Attempt to recover by trying to re-render the invoices route
           () => {
             document.cookie =
-              "ess_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+              `${AUTH_COOKIE_NAME}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
             router.push("/auth"); // Redirect to home page after resetting
           }
         }

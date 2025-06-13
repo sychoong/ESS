@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { ESS_API_URL } from "../util/constants";
+import { ESS_API_URL,AUTH_COOKIE_NAME } from "@/util/constants";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const getLeave = async (
@@ -8,7 +8,7 @@ const getLeave = async (
 ): Promise<Leave[]> => {
   const url = "/v1/ess/leave/leave_application/employee";
   const cookiesStore = await cookies();
-  const token = cookiesStore.get("ess_token")?.value;
+  const token = cookiesStore.get(AUTH_COOKIE_NAME)?.value;
   if (!token) {
     throw new Error("Authentication token is missing");
   }
