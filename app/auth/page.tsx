@@ -4,6 +4,8 @@ import { AUTH_COOKIE_NAME } from "@/util/constants";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
+export const dynamic = "force-dynamic";
+
 function Auth() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -77,7 +79,7 @@ function Auth() {
             // );
             const url = new URL(decodeURI(await getLoginUrl()));
             const params = new URLSearchParams(url.search);
-            params.set("RelayState", `${process.env.NEXT_PUBLIC_BASE}/auth/`);
+            params.set("RelayState", `${window.location.origin}/auth/`);
             url.search = params.toString();
             router.push(url.toString()); // Redirect to home page after saving cookie
           }}

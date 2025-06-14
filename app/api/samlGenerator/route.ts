@@ -3,19 +3,19 @@ import { Data, deflateRaw } from "pako";
 import { NextResponse } from "next/server";
 
 // 随机 ID
-export const generateID = () => {
+const generateID = () => {
   return (
     "_" + Math.random().toString(36).substring(2) + Date.now().toString(36)
   );
 };
 
 // 当前时间 ISO 格式
-export const getTimestamp = () => {
+const getTimestamp = () => {
   return new Date().toISOString();
 };
 
 // 生成 SAML XML
-export const generateSAMLRequestXml = ({
+const generateSAMLRequestXml = ({
   id,
   issueInstant,
 }: {
@@ -38,14 +38,14 @@ export const generateSAMLRequestXml = ({
 };
 
 // 编码成 SAMLRequest
-export const encodeSAMLRequest = (xml: string | Data) => {
+const encodeSAMLRequest = (xml: string | Data) => {
   const deflated = deflateRaw(xml, { level: 9 });
   const base64 = Buffer.from(deflated).toString("base64");
   return encodeURIComponent(base64);
 };
 
 // 主函数
-export const createSAMLRequestURL = () => {
+const createSAMLRequestURL = () => {
   const id = generateID();
   const timestamp = getTimestamp();
   const xml = generateSAMLRequestXml({
