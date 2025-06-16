@@ -22,18 +22,36 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
   const [error, setError] = useState<boolean>(false);
   const router = useRouter();
 
+  /**
+   * 生成半自然的打卡精度 (无小数点)
+   * 85% 的概率生成 10 的倍数，15% 的概率生成 10~100 之间的任意整数
+   */
+  const generateSemiNaturalAccuracy = () => {
+    const useMultipleOf10 = Math.random() < 0.85; // 85% 生成 10 的倍数
+    if (useMultipleOf10) {
+      const multiplesOf10 = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+      return multiplesOf10[Math.floor(Math.random() * multiplesOf10.length)];
+    } else {
+      // 生成 10~100 之间的任意整数，避免重复出现整十
+      let value;
+      do {
+        value = Math.floor(Math.random() * 91) + 10;
+      } while (value % 10 === 0);
+      return value;
+    }
+  };
+
   const handleClick = async () => {
     setLoading(true);
     const now = new Date();
     const formattedDateString = formatDateForClockIn(now);
-    const minAccuracy = 10; // 模拟用户 GPS 开着，通常 5～50 是最可信
-    const maxAccuracy = 100;
+
     try {
       const clockData = {
         type: clockInOrOut ? "1" : "2", // 1 for clock in, 2 for clock out
         device_type: "web",
         ip_address: "null",
-        accuracy: Math.random() * (maxAccuracy - minAccuracy) + minAccuracy,
+        accuracy: generateSemiNaturalAccuracy(),
         datetime: formattedDateString,
         location: `${location.latitude}, ${location.longitude}`,
         external_id: id,
