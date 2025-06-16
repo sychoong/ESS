@@ -13,7 +13,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`} suppressHydrationWarning={true}>
+      <body className={`antialiased px-2`} suppressHydrationWarning={true}>
         {children}
       </body>
     </html>

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "framer-motion": "^12.18.1",
     "next": "15.3.3",
     "pako": "^2.1.0",
     "puppeteer": "^24.10.0",
