@@ -63,8 +63,11 @@ export default async function Report({
         currentMonth={currentMonth}
         startDate={startDate}
       />
-
-      <ClockIn id={userInfo.id} timeSheets={timeSheets}></ClockIn>
+      {currentMonth === month ? (
+        <ClockIn id={userInfo.id} timeSheets={timeSheets}/>
+      ) : (
+        <></>
+      )}
 
       <MonthlySummaryWrapper
         selectedMonth={month}
