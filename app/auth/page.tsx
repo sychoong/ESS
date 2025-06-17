@@ -2,7 +2,7 @@
 
 import { AUTH_COOKIE_NAME } from "@/util/constants";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import FakeIntro from "./motion";
 
 export const dynamic = "force-dynamic";
@@ -116,9 +116,5 @@ function Auth() {
 }
 
 export default function Page() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Auth />
-    </Suspense>
-  );
+  return <Auth />;
 }
