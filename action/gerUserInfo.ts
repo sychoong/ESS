@@ -14,6 +14,8 @@ const getUserInfo = async (): Promise<{ id: string; name: string }> => {
     headers: {
       "Content-Type": "application/json",
       Authorization: token,
+      host: process.env.NEXT_PUBLIC_TALENT_CLOUD_URL || "",
+      "x-forwarded-host": "",
     },
   });
 

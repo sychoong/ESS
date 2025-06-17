@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { ESS_API_URL,AUTH_COOKIE_NAME } from "@/util/constants";
+import { ESS_API_URL, AUTH_COOKIE_NAME } from "@/util/constants";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const getLeave = async (
@@ -23,6 +23,8 @@ const getLeave = async (
       headers: {
         "Content-Type": "application/json",
         Authorization: token,
+        host: process.env.NEXT_PUBLIC_TALENT_CLOUD_URL || "",
+        "x-forwarded-host": "",
       },
     }
   );
