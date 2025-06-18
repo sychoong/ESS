@@ -4,7 +4,7 @@ import clockIn from "@/action/clockIn";
 import { BASE_LOCATION } from "@/util/constants";
 import { formatDateForClockIn, getLocation, testDistance } from "@/util/helper";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 interface ClockInButtonProps {
   show: boolean;
@@ -20,29 +20,49 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
   const [location, setLocation] = useState(getLocation());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
-  const [accuracy, setAccuracy] = useState<number>(0);
   const router = useRouter();
 
   /**
-   * 生成半自然的打卡精度 (无小数点)
-   * 85% 的概率生成 10 的倍数，15% 的概率生成 10~100 之间的任意整数
+   * 生成半自然的打卡精度
+   * 50% 的概率生成 10 的倍数 (20,30)，50% 的概率生成 10~40 之间的任意整数
    */
-  const generateSemiNaturalAccuracy = () => {
-    if (accuracy > 100 && accuracy <= 0) {
-      const useMultipleOf10 = Math.random() < 0.85; // 85% 生成 10 的倍数
-      if (useMultipleOf10) {
-        const multiplesOf10 = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-        return multiplesOf10[Math.floor(Math.random() * multiplesOf10.length)];
-      } else {
-        // 生成 10~100 之间的任意整数，避免重复出现整十
-        let value;
-        do {
-          value = Math.floor(Math.random() * 91) + 10;
-        } while (value % 10 === 0);
-        return value;
-      }
+
+  const generateAccurateFloat = () => {
+    const float = Math.random() * 40 + 10;
+    const fixedStr = float.toFixed(15); // 字符串，确保 15 位
+    const parsed = parseFloat(fixedStr); // 可能会丢失尾部 0
+
+    const parsedStr = parsed.toString();
+    const decimal = parsedStr.split(".")[1] || "";
+
+    // 检查当前小数位数
+    if (decimal.length < 15) {
+      const missingCount = 15 - decimal.length;
+
+      // 随机生成非零数字序列来补尾
+      const nonZeroDigits = Array.from(
+        { length: missingCount },
+        () => Math.floor(Math.random() * 9) + 1 // 1~9，不含0
+      ).join("");
+
+      const paddedStr = parsedStr.includes(".")
+        ? parsedStr + nonZeroDigits
+        : parsedStr + "." + nonZeroDigits;
+
+      return parseFloat(paddedStr);
     }
-    return accuracy; // 如果精度在 0-100 之间，直接返回
+
+    return parsed;
+  };
+
+  const generateSemiNaturalAccuracy = () => {
+    const useInteger = Math.random() < 0.5; // 50% 几率为整数，50% 为 15 位小数
+    if (useInteger) {
+      const multiplesOf10 = [20, 30];
+      return multiplesOf10[Math.floor(Math.random() * multiplesOf10.length)];
+    } else {
+      return generateAccurateFloat();
+    }
   };
 
   const handleClick = async () => {
@@ -80,27 +100,11 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
       setLoading(false);
     }
   };
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { accuracy } = position.coords;
-        setAccuracy(accuracy);
-      },
-      (error) => {
-        console.error("❌ 获取定位失败：", error.message);
-      },
-      {
-        enableHighAccuracy: true, // 更高精度（会耗更多电）
-        timeout: 5000,
-        maximumAge: 0,
-      }
-    );
-  }, []);
-  if (!show) return <p>{accuracy} meters accuracy</p>;
+
+  if (!show) return <></>;
 
   return (
     <div className="flex flex-col mx-auto items-center gap-y-2">
-      <p>{accuracy} meters accuracy</p>
       <p>
         Distance from base location:
         {testDistance(
