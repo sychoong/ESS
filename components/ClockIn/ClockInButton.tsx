@@ -4,7 +4,7 @@ import clockIn from "@/action/clockIn";
 import { BASE_LOCATION } from "@/util/constants";
 import { formatDateForClockIn, getLocation, testDistance } from "@/util/helper";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface ClockInButtonProps {
   show: boolean;
@@ -20,6 +20,7 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
   const [location, setLocation] = useState(getLocation());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
+  const [accuracy, setAccuracy] = useState<number>(0);
   const router = useRouter();
 
   /**
@@ -27,18 +28,21 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
    * 85% 的概率生成 10 的倍数，15% 的概率生成 10~100 之间的任意整数
    */
   const generateSemiNaturalAccuracy = () => {
-    const useMultipleOf10 = Math.random() < 0.85; // 85% 生成 10 的倍数
-    if (useMultipleOf10) {
-      const multiplesOf10 = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-      return multiplesOf10[Math.floor(Math.random() * multiplesOf10.length)];
-    } else {
-      // 生成 10~100 之间的任意整数，避免重复出现整十
-      let value;
-      do {
-        value = Math.floor(Math.random() * 91) + 10;
-      } while (value % 10 === 0);
-      return value;
+    if (accuracy > 100 && accuracy <= 0) {
+      const useMultipleOf10 = Math.random() < 0.85; // 85% 生成 10 的倍数
+      if (useMultipleOf10) {
+        const multiplesOf10 = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+        return multiplesOf10[Math.floor(Math.random() * multiplesOf10.length)];
+      } else {
+        // 生成 10~100 之间的任意整数，避免重复出现整十
+        let value;
+        do {
+          value = Math.floor(Math.random() * 91) + 10;
+        } while (value % 10 === 0);
+        return value;
+      }
     }
+    return accuracy; // 如果精度在 0-100 之间，直接返回
   };
 
   const handleClick = async () => {
@@ -76,10 +80,27 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
       setLoading(false);
     }
   };
-  if (!show) return <></>;
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { accuracy } = position.coords;
+        setAccuracy(accuracy);
+      },
+      (error) => {
+        console.error("❌ 获取定位失败：", error.message);
+      },
+      {
+        enableHighAccuracy: true, // 更高精度（会耗更多电）
+        timeout: 5000,
+        maximumAge: 0,
+      }
+    );
+  }, []);
+  if (!show) return <p>{accuracy} meters accuracy</p>;
 
   return (
     <div className="flex flex-col mx-auto items-center gap-y-2">
+      <p>{accuracy} meters accuracy</p>
       <p>
         Distance from base location:
         {testDistance(
