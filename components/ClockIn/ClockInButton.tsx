@@ -4,7 +4,7 @@ import clockIn from "@/action/clockIn";
 import { BASE_LOCATION } from "@/util/constants";
 import { formatDateForClockIn, getLocation, testDistance } from "@/util/helper";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface ClockInButtonProps {
   show: boolean;
@@ -21,6 +21,7 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const router = useRouter();
+  const [accuracy, setAccuracy] = useState<number | null>(null);
 
   /**
    * 生成半自然的打卡精度
@@ -101,10 +102,28 @@ const ClockInButton: React.FC<ClockInButtonProps> = ({
     }
   };
 
-  if (!show) return <></>;
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { accuracy } = position.coords;
+        setAccuracy(accuracy);
+      },
+      (error) => {
+        console.error("❌ 获取定位失败：", error.message);
+      },
+      {
+        enableHighAccuracy: true, // 更高精度（会耗更多电）
+        timeout: 5000,
+        maximumAge: 0,
+      }
+    );
+  }, []);
+
+  if (!show) return <span>{accuracy} accuracy</span>;
 
   return (
     <div className="flex flex-col mx-auto items-center gap-y-2">
+      <span>{accuracy} accuracy</span>
       <p>
         Distance from base location:
         {testDistance(
